@@ -1,25 +1,29 @@
 package ercankara.uygulamam_backhad.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
 @Entity
-@Table(name = "land")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Land {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Column(nullable = false, length = 50)
-    String name;
-    @Column(nullable = false)
-    int landSize;
-    @Column(nullable = false)
-    String city;
-    @Column(nullable = false)
-    String district;
-    private String landType;
-    String village;
+    private Long id;
+
+    private String name;
+    private double landSize;
+    private String city;
+    private String district;
+    private String village;
+
+    // Kullanıcı ile ilişki
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
