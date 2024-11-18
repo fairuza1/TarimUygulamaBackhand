@@ -6,8 +6,6 @@ import ercankara.uygulamam_backhad.entity.User;
 import ercankara.uygulamam_backhad.repository.LandRepository;
 import ercankara.uygulamam_backhad.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @Service
@@ -22,7 +20,7 @@ public class LandService {
     }
 
     // Araziyi kaydetme
-    public Land saveLand(LandDTO landDto, MultipartFile file) {
+    public Land saveLand(LandDTO landDto) {
         Land land = new Land();
         land.setName(landDto.getName());
         land.setLandSize(landDto.getLandSize());
@@ -33,8 +31,6 @@ public class LandService {
         // Kullanıcıyı bul
         User user = userRepository.findById(landDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         land.setUser(user);
-
-        // Dosya ile ilgili işlem yapılabilir (isteğe bağlı)
 
         // Kaydet ve döndür
         return landRepository.save(land);

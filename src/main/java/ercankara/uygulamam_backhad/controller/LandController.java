@@ -27,9 +27,8 @@ public class LandController {
     }
 
     // Arazi ekleme metodu
-    @PostMapping
-    public ResponseEntity<LandDTO> createLand(@RequestPart("land") LandDTO landDto,
-                                              @RequestPart(value = "file", required = false) MultipartFile file) {
+    @PostMapping("/add")
+    public ResponseEntity<LandDTO> createLand(@RequestBody LandDTO landDto) {
         if (landDto.getUserId() == null) {
             throw new IllegalArgumentException("User ID boş olamaz.");
         }
@@ -41,8 +40,8 @@ public class LandController {
         // LandDTO'ya userId'yi set et
         landDto.setUserId(user.getId());
 
-        // Araziyi kaydet ve DTO olarak döndür
-        Land land = landService.saveLand(landDto, file);
+        // Araziyi kaydet
+        Land land = landService.saveLand(landDto);
         LandDTO savedLandDto = landService.getLandById(land.getId());
 
         // Kaydedilen araziyi HTTP 201 ile döndür
@@ -54,7 +53,7 @@ public class LandController {
     public List<LandDTO> getLandsByUser() {
         // Oturum açan kullanıcının kimliğini almak
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();  // Kullanıcı adı (ya da email)
+        String username = authentication.getName();
 
         // Kullanıcıyı bulmak için UserService kullan
         User user = userService.findByUsername(username)
