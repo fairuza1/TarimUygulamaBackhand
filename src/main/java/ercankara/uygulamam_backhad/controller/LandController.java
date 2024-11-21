@@ -27,7 +27,7 @@ public class LandController {
     }
 
     // Arazi ekleme metodu
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<LandDTO> createLand(@RequestBody LandDTO landDto) {
         if (landDto.getUserId() == null) {
             throw new IllegalArgumentException("User ID boş olamaz.");

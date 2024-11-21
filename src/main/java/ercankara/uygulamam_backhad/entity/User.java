@@ -1,11 +1,11 @@
 package ercankara.uygulamam_backhad.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference; // Import et
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 import java.util.List;
 
@@ -27,5 +27,6 @@ public class User {
 
     // Kullanıcıya ait araziler
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference // Bu, 'lands' listesinin serileştirilmesini sağlar
     private List<Land> lands;
 }

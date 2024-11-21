@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // Yeni sınıfı kullan
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("users/register", "users/login").permitAll()
-                        .requestMatchers("/lands/add").permitAll()
+                        .requestMatchers("/lands").permitAll()
                         .requestMatchers("/sowings/**").authenticated()
                         .requestMatchers("/harvests/**").authenticated()
                         .anyRequest().authenticated()

@@ -1,5 +1,6 @@
 package ercankara.uygulamam_backhad.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference; // Import et
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class Land {
     // Kullanıcı ile ilişki
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference // Bu, 'user' alanının serileştirilmesini engeller
     private User user;
 }
