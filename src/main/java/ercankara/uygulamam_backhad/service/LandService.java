@@ -6,6 +6,7 @@ import ercankara.uygulamam_backhad.entity.User;
 import ercankara.uygulamam_backhad.repository.LandRepository;
 import ercankara.uygulamam_backhad.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -28,8 +29,9 @@ public class LandService {
         land.setDistrict(landDto.getDistrict());
         land.setVillage(landDto.getVillage());
 
-        // Kullanıcıyı bul
-        User user = userRepository.findById(landDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        // Kullanıcıyı bul ve ilişkilendir
+        User user = userRepository.findById(landDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         land.setUser(user);
 
         // Kaydet ve döndür
@@ -39,12 +41,13 @@ public class LandService {
     // Kullanıcıya ait arazileri listele
     public List<LandDTO> getLandsByUser(Long userId) {
         List<Land> lands = landRepository.findByUserId(userId);
-        return lands.stream().map(land -> new LandDTO(land)).toList();
+        return lands.stream().map(LandDTO::new).toList();
     }
 
     // ID'ye göre arazi getirme
     public LandDTO getLandById(Long id) {
-        Land land = landRepository.findById(id).orElseThrow(() -> new RuntimeException("Land not found"));
+        Land land = landRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Land not found"));
         return new LandDTO(land);
     }
 }

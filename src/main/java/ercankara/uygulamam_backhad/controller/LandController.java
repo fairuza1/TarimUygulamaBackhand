@@ -7,10 +7,7 @@ import ercankara.uygulamam_backhad.service.LandService;
 import ercankara.uygulamam_backhad.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,24 +39,29 @@ public class LandController {
 
         // Araziyi kaydet
         Land land = landService.saveLand(landDto);
-        LandDTO savedLandDto = landService.getLandById(land.getId());
 
         // Kaydedilen araziyi HTTP 201 ile döndür
+        LandDTO savedLandDto = landService.getLandById(land.getId());
         return new ResponseEntity<>(savedLandDto, HttpStatus.CREATED);
     }
 
-    // Kullanıcıya ait arazileri listeleme metodu
+    // Kullanıcıya ait arazileri listeleme metodu (sadece userId ile)
     @GetMapping
-    public List<LandDTO> getLandsByUser() {
-        // Oturum açan kullanıcının kimliğini almak
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
+    public ResponseEntity<List<LandDTO>> getLandsByUser(@RequestParam Long userId) {
 
-        // Kullanıcıyı bulmak için UserService kullan
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Kullanıcıyı userId ile bul
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User with ID " + userId + " not found"));
 
         // Kullanıcıya ait arazileri getirmek
-        return landService.getLandsByUser(user.getId());
+        List<LandDTO> lands = landService.getLandsByUser(user.getId());
+
+        // Eğer kullanıcıya ait arazi yoksa, HTTP 204 No Content döndürüyoruz
+        if (lands.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        // Kullanıcıya ait arazileri HTTP 200 ile döndürüyoruz
+        return ResponseEntity.ok(lands);
     }
 }
