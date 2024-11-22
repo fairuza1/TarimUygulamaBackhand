@@ -64,4 +64,18 @@ public class LandController {
         // Kullanıcıya ait arazileri HTTP 200 ile döndürüyoruz
         return ResponseEntity.ok(lands);
     }
+
+    // Arazi silme metodu
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLand(@PathVariable Long id) {
+        landService.deleteLand(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Arazi güncelleme metodu
+    @PutMapping("/{id}")
+    public ResponseEntity<LandDTO> updateLand(@PathVariable Long id, @RequestBody LandDTO updatedLandDto) {
+        LandDTO updatedLand = landService.updateLand(id, updatedLandDto);
+        return ResponseEntity.ok(updatedLand);
+    }
 }

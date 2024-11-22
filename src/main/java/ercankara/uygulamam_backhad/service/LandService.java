@@ -50,4 +50,26 @@ public class LandService {
                 .orElseThrow(() -> new RuntimeException("Land not found"));
         return new LandDTO(land);
     }
+
+    // Arazi silme
+    public void deleteLand(Long id) {
+        Land land = landRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Land with ID " + id + " not found"));
+        landRepository.delete(land);
+    }
+
+    // Arazi güncelleme
+    public LandDTO updateLand(Long id, LandDTO updatedLandDto) {
+        Land existingLand = landRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Land with ID " + id + " not found"));
+
+        existingLand.setName(updatedLandDto.getName());
+        existingLand.setLandSize(updatedLandDto.getLandSize());
+        existingLand.setCity(updatedLandDto.getCity());
+        existingLand.setDistrict(updatedLandDto.getDistrict());
+        existingLand.setVillage(updatedLandDto.getVillage());
+
+        Land updatedLand = landRepository.save(existingLand);
+        return new LandDTO(updatedLand);
+    }
 }
