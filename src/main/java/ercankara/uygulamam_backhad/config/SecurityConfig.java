@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("users/register", "users/login").permitAll()
                         .requestMatchers("/lands").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/lands/**").permitAll()
                         .requestMatchers("/sowings/**").authenticated()
                         .requestMatchers("/harvests/**").authenticated()
                         .anyRequest().authenticated()

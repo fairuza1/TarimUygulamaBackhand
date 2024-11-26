@@ -1,7 +1,6 @@
 package ercankara.uygulamam_backhad.controller;
 
 import ercankara.uygulamam_backhad.entity.User;
-import ercankara.uygulamam_backhad.repository.UserRepository;
 import ercankara.uygulamam_backhad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,16 +16,29 @@ public class UserController {
 
     // Kullanıcı kaydı
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        User savedUser = userService.registerUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    public ResponseEntity<String> register(@RequestBody User user) {
+        try {
+            User savedUser = userService.registerUser(user);
+            return new ResponseEntity<>("Kullanıcı başarıyla kaydedildi!", HttpStatus.CREATED);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST); // Hata mesajını response body olarak dönüyoruz.
+        }
     }
 
     // Kullanıcı girişi (basit doğrulama)
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
-        User foundUser = userService.loginUser(user.getEmail(), user.getPassword());
-        return foundUser != null ? new ResponseEntity<>(foundUser, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        try {
+            User foundUser = userService.loginUser(user.getEmail(), user.getPassword());
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    // Global Exception Handler
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleValidationException(IllegalArgumentException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
