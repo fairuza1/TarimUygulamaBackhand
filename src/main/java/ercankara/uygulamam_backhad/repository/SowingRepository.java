@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SowingRepository extends JpaRepository<Sowing, Long> {
     List<Sowing> findByLandId(Long landId);
+    List<Sowing> findByLandIdIn(List<Long> landIds);
 }

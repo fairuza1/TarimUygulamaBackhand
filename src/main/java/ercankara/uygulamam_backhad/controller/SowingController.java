@@ -33,4 +33,13 @@ public class SowingController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<SowingDTO>> getSowingsByUser(@PathVariable Long userId) {
+        List<SowingDTO> sowings = sowingService.getSowingsByUserId(userId);
+        if (sowings.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(sowings);
+    }
+
 }

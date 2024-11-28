@@ -50,4 +50,16 @@ public class SowingService {
         sowing.setSowingDate(dto.getSowingDate());
         return sowing;
     }
+    public List<SowingDTO> getSowingsByUserId(Long userId) {
+        List<Long> landIds = landRepository.findByUserId(userId)
+                .stream()
+                .map(Land::getId)
+                .collect(Collectors.toList());
+
+        return sowingRepository.findByLandIdIn(landIds)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 }
