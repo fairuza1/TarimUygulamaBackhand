@@ -10,4 +10,12 @@ public class SowingDTO {
     private Long landId;
     private int plantingAmount;
     private LocalDate sowingDate;
-}
+
+    // Kategori bilgisi ekleniyor
+    private Long categoryId;      // Yeni kategori ID alanı
+    private String categoryName;  // Yeni kategori adı alanı
+
+    private String landName;
+    private String plantName;
+
+} 

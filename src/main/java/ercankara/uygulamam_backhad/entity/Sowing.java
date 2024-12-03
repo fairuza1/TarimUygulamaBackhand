@@ -15,6 +15,10 @@ public class Sowing {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "plant_id", nullable = false)
+    private Plant plant;
+
+    @ManyToOne
     @JoinColumn(name = "land_id", nullable = false)
     @JsonBackReference
     private Land land;
