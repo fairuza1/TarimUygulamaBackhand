@@ -14,6 +14,8 @@ public class Sowing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
+
     @ManyToOne
     @JoinColumn(name = "plant_id", nullable = false)
     private Plant plant;
@@ -28,4 +30,7 @@ public class Sowing {
 
     @Column(nullable = false)
     private LocalDate sowingDate;
+    // Kategori bilgisi
+    private Long categoryId;      // Kategori ID
+    private String categoryName;  // Kategori adı
 }

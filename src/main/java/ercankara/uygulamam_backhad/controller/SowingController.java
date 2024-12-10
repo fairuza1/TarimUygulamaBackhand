@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/api/sowings")
 @RequiredArgsConstructor
 public class SowingController {
+
     private final SowingService sowingService;
 
     @GetMapping("/land/{landId}")
@@ -33,6 +34,7 @@ public class SowingController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<SowingDTO>> getSowingsByUser(@PathVariable Long userId) {
         List<SowingDTO> sowings = sowingService.getSowingsByUserId(userId);
@@ -41,5 +43,4 @@ public class SowingController {
         }
         return ResponseEntity.ok(sowings);
     }
-
 }

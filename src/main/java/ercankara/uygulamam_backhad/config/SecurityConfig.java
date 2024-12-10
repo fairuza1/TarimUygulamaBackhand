@@ -27,9 +27,10 @@ public class SecurityConfig {
                         .requestMatchers("users/register", "users/login").permitAll()
                         .requestMatchers("/lands").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/lands/**").permitAll()
-                        .requestMatchers("/categories").permitAll()  // Kategoriler herkese açık
+                        .requestMatchers("/categories/**").permitAll()  // Kategoriler herkese açık
                         .requestMatchers("/api/sowings").permitAll()
-                        .requestMatchers("/harvests/**").authenticated()
+                        .requestMatchers("/plants/by-category","/plants/detail/").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
