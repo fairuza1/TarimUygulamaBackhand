@@ -47,6 +47,8 @@ public class SowingService {
         sowing.setCategoryId(sowingDTO.getCategoryId());
         sowing.setCategoryName(sowingDTO.getCategoryName());
 
+        sowing.setUserId(sowingDTO.getUserId());
+
         Sowing savedSowing = sowingRepository.save(sowing);
         return convertToDTO(savedSowing);
     }
@@ -60,6 +62,7 @@ public class SowingService {
         sowingDTO.setPlantingAmount(sowing.getPlantingAmount());
         sowingDTO.setSowingDate(sowing.getSowingDate());
         sowingDTO.setCategoryId(sowing.getCategoryId());
+        sowingDTO.setUserId(sowing.getUserId());
         sowingDTO.setCategoryName(sowing.getCategoryName());
         return sowingDTO;
     }

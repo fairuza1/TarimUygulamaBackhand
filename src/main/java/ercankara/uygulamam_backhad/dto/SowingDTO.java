@@ -18,5 +18,5 @@ public class SowingDTO {
 
     private String landName;
     private String plantName;
-
+    private Long userId; // Yeni kullanıcı ID alanı
 }
