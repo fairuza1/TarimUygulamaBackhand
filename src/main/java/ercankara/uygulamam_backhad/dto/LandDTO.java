@@ -19,6 +19,8 @@ public class LandDTO {
     private String district;
     private String village;
     private Long userId;
+    private double remainingSize;
+
 
     // Entity'den DTO'ya dönüşüm
     public LandDTO(Land land) {
@@ -29,5 +31,7 @@ public class LandDTO {
         this.district = land.getDistrict();
         this.village = land.getVillage();
         this.userId = Long.valueOf(land.getUser().getId());
+        this.remainingSize = land.getRemainingSize();
+
     }
 }

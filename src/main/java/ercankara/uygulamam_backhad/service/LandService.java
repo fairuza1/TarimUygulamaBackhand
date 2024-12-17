@@ -28,11 +28,14 @@ public class LandService {
         land.setCity(landDto.getCity());
         land.setDistrict(landDto.getDistrict());
         land.setVillage(landDto.getVillage());
+        land.setRemainingSize(landDto.getLandSize());
 
         // Kullanıcıyı bul ve ilişkilendir
         User user = userRepository.findById(landDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         land.setUser(user);
+
+
 
         // Kaydet ve döndür
         return landRepository.save(land);
@@ -68,6 +71,7 @@ public class LandService {
         existingLand.setCity(updatedLandDto.getCity());
         existingLand.setDistrict(updatedLandDto.getDistrict());
         existingLand.setVillage(updatedLandDto.getVillage());
+        existingLand.setRemainingSize(updatedLandDto.getLandSize());
 
         Land updatedLand = landRepository.save(existingLand);
         return new LandDTO(updatedLand);

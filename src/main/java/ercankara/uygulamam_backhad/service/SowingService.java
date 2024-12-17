@@ -1,5 +1,6 @@
 package ercankara.uygulamam_backhad.service;
 
+import ercankara.uygulamam_backhad.controller.GlobalExceptionHandler;
 import ercankara.uygulamam_backhad.dto.SowingDTO;
 import ercankara.uygulamam_backhad.entity.Sowing;
 import ercankara.uygulamam_backhad.entity.Land;
@@ -34,9 +35,19 @@ public class SowingService {
     }
 
     public SowingDTO createSowing(SowingDTO sowingDTO) {
-        Land land = landRepository.findById(sowingDTO.getLandId()).orElseThrow(() -> new RuntimeException("Land not found"));
-        Plant plant = plantRepository.findById(sowingDTO.getPlantId()).orElseThrow(() -> new RuntimeException("Plant not found"));
+        // Araziyi bulma
+        Land land = landRepository.findById(sowingDTO.getLandId())
+                .orElseThrow(() -> new RuntimeException("Land not found"));
 
+        // Bitkiyi bulma
+        Plant plant = plantRepository.findById(sowingDTO.getPlantId())
+                .orElseThrow(() -> new RuntimeException("Plant not found"));
+
+        if (land.getRemainingSize() < sowingDTO.getPlantingAmount()) {
+            throw new GlobalExceptionHandler.InsufficientLandSizeException("Yetersiz alan! Kalan alan: " + land.getRemainingSize());
+        }
+
+        // Yeni ekim kaydı oluşturma
         Sowing sowing = new Sowing();
         sowing.setLand(land);
         sowing.setPlant(plant);
@@ -46,9 +57,14 @@ public class SowingService {
         // Kategori bilgisi
         sowing.setCategoryId(sowingDTO.getCategoryId());
         sowing.setCategoryName(sowingDTO.getCategoryName());
-
         sowing.setUserId(sowingDTO.getUserId());
 
+        // Arazi kalan alanını güncelleme
+        double updatedRemainingSize = land.getRemainingSize() - sowingDTO.getPlantingAmount();
+        land.setRemainingSize(updatedRemainingSize);
+        landRepository.save(land); // Güncellenmiş araziyi kaydet
+
+        // Ekim kaydını kaydetme ve dönüş
         Sowing savedSowing = sowingRepository.save(sowing);
         return convertToDTO(savedSowing);
     }

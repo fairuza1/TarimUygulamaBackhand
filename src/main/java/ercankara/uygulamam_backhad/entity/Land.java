@@ -23,6 +23,8 @@ public class Land {
     private String city;
     private String district;
     private String village;
+    private double remainingSize;
+
 
     // Kullanıcı ile ilişki
     @ManyToOne
