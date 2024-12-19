@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -33,4 +34,7 @@ public class Sowing {
     // Kategori bilgisi
     private Long categoryId;      // Kategori ID
     private String categoryName;  // Kategori adı
+
+    @OneToMany(mappedBy = "sowing", cascade = CascadeType.REMOVE)
+    private List<Harvest> harvests;
 }

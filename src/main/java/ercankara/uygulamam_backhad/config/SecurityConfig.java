@@ -29,6 +29,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/lands/**").permitAll()
                         .requestMatchers("/categories/**").permitAll()  // Kategoriler herkese açık
                         .requestMatchers("/api/sowings/**").permitAll()
+                        .requestMatchers("/harvests/**").permitAll()
+
                         .requestMatchers("/plants/by-category","/plants/detail/").permitAll()
 
                         .anyRequest().authenticated()
