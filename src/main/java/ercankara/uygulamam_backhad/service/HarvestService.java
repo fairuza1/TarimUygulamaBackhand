@@ -54,6 +54,14 @@ public class HarvestService {
         }
         return harvestDTO;
     }
+    public List<HarvestDTO> getHarvestsByUserId(Long userId) {
+        // Kullanıcı ID'sine ait ekimlere göre hasatları filtrele
+        return harvestRepository.findAll().stream()
+                .filter(harvest -> harvest.getSowing() != null && harvest.getSowing().getUserId().equals(userId))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 
     private Harvest convertToEntity(HarvestDTO harvestDTO) {
         Harvest harvest = new Harvest();

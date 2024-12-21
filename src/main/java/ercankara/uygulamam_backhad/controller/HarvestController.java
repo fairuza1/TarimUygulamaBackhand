@@ -24,6 +24,15 @@ public class HarvestController {
     public ResponseEntity<List<HarvestDTO>> getAllHarvests() {
         List<HarvestDTO> harvests = harvestService.getAllHarvests();
         return new ResponseEntity<>(harvests, HttpStatus.OK);
+
+    }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<HarvestDTO>> getHarvestsByUser(@PathVariable Long userId) {
+        List<HarvestDTO> harvests = harvestService.getHarvestsByUserId(userId);
+        if (harvests.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(harvests);
     }
 
     @PostMapping
