@@ -50,8 +50,14 @@ public class HarvestService {
         harvestDTO.setHarvestDate(harvest.getHarvestDate());
 
         if (harvest.getSowing() != null) {
-            harvestDTO.setSowingId(harvest.getSowing().getId());
+            Sowing sowing = harvest.getSowing();
+            harvestDTO.setSowingId(sowing.getId());
+            harvestDTO.setPlantName(sowing.getPlant() != null ? sowing.getPlant().getName() : null); // Bitki adı
+            harvestDTO.setCategoryName(sowing.getCategoryName()); // Kategori adı
+            harvestDTO.setLandName(sowing.getLand() != null ? sowing.getLand().getName() : null);   // Arazi adı
+            harvestDTO.setPlantingAmount(sowing.getPlantingAmount()); // Ekim miktarı
         }
+
         return harvestDTO;
     }
     public List<HarvestDTO> getHarvestsByUserId(Long userId) {

@@ -10,4 +10,8 @@ public class HarvestDTO {
     private LocalDate harvestDate;
     private Long sowingId;
 
+    private String plantName;      // Bitki adı
+    private String categoryName;   // Kategori adı
+    private String landName;       // Arazi adı
+    private int plantingAmount;    // Ekim miktarı
 }
