@@ -80,6 +80,8 @@ public class SowingService {
         sowingDTO.setCategoryId(sowing.getCategoryId());
         sowingDTO.setUserId(sowing.getUserId());
         sowingDTO.setCategoryName(sowing.getCategoryName());
+        sowingDTO.setRemainingSize(sowing.getLand().getRemainingSize()); // Burada ekleme
+
         return sowingDTO;
     }
 }
