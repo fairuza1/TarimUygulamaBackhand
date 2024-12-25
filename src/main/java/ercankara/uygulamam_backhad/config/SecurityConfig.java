@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // Yeni sınıfı kullan
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("users/register", "users/login").permitAll()
-                        .requestMatchers("/lands").permitAll()
+                        .requestMatchers("/lands/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/lands/**").permitAll()
                         .requestMatchers("/categories/**").permitAll()  // Kategoriler herkese açık
                         .requestMatchers("/api/sowings/**").permitAll()

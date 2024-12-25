@@ -71,7 +71,10 @@ public class LandController {
         landService.deleteLand(id);
         return ResponseEntity.noContent().build();
     }
-
+    @GetMapping("/detail/{id}")
+    public LandDTO getLandById(@PathVariable Long id) {
+        return landService.getLandById(id);
+    }
     // Arazi güncelleme metodu
     @PutMapping("/{id}")
     public ResponseEntity<LandDTO> updateLand(@PathVariable Long id, @RequestBody LandDTO updatedLandDto) {
