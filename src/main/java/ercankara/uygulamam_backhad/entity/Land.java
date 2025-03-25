@@ -24,6 +24,8 @@ public class Land {
     private String district;
     private String village;
     private double remainingSize;
+    // Fotoğraf yolu ekleniyor
+    private String photoPath;
 
 
     // Kullanıcı ile ilişki

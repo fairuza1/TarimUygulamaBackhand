@@ -35,7 +35,10 @@ public class LandService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         land.setUser(user);
 
-
+        // Fotoğraf yolu ekleyelim
+        if (landDto.getPhotoPath() != null) {
+            land.setPhotoPath(landDto.getPhotoPath());
+        }
 
         // Kaydet ve döndür
         return landRepository.save(land);
@@ -72,6 +75,10 @@ public class LandService {
         existingLand.setDistrict(updatedLandDto.getDistrict());
         existingLand.setVillage(updatedLandDto.getVillage());
         existingLand.setRemainingSize(updatedLandDto.getLandSize());
+
+        if (updatedLandDto.getPhotoPath() != null) {
+            existingLand.setPhotoPath(updatedLandDto.getPhotoPath());
+        }
 
         Land updatedLand = landRepository.save(existingLand);
         return new LandDTO(updatedLand);
