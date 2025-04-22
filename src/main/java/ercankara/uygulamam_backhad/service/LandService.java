@@ -69,12 +69,21 @@ public class LandService {
         Land existingLand = landRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Land with ID " + id + " not found"));
 
+        double usedSize = existingLand.getLandSize() - existingLand.getRemainingSize();
+
+        // Yeni boyut, kullanılan alandan küçükse hata ver
+        if (updatedLandDto.getLandSize() < usedSize) {
+            throw new IllegalArgumentException("Yeni arazi boyutu, yapılan ekimlerden küçük olamaz.");
+        }
+
+        double newRemainingSize = updatedLandDto.getLandSize() - usedSize;
+
         existingLand.setName(updatedLandDto.getName());
         existingLand.setLandSize(updatedLandDto.getLandSize());
         existingLand.setCity(updatedLandDto.getCity());
         existingLand.setDistrict(updatedLandDto.getDistrict());
         existingLand.setVillage(updatedLandDto.getVillage());
-        existingLand.setRemainingSize(updatedLandDto.getLandSize());
+        existingLand.setRemainingSize(newRemainingSize); // 🔧 Fix burada
 
         if (updatedLandDto.getPhotoPath() != null) {
             existingLand.setPhotoPath(updatedLandDto.getPhotoPath());
@@ -83,4 +92,5 @@ public class LandService {
         Land updatedLand = landRepository.save(existingLand);
         return new LandDTO(updatedLand);
     }
+
 }

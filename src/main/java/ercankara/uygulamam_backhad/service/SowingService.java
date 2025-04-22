@@ -85,7 +85,22 @@ public class SowingService {
         return sowingDTO;
     }
     public void deleteSowing(Long id) {
-        sowingRepository.deleteById(id); // Cascade burada çalışacak
+        Sowing sowing = sowingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sowing not found"));
+
+        Land land = sowing.getLand();
+        double newRemainingSize = land.getRemainingSize() + sowing.getPlantingAmount();
+
+        // Kalan alan, toplam alanı geçemez
+        if (newRemainingSize > land.getLandSize()) {
+            newRemainingSize = land.getLandSize();
+        }
+
+        land.setRemainingSize(newRemainingSize);
+        landRepository.save(land); // Güncellenmiş araziyi kaydet
+
+        sowingRepository.delete(sowing);
     }
+
 
 }
