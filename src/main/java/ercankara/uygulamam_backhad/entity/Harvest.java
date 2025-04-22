@@ -1,5 +1,6 @@
 package ercankara.uygulamam_backhad.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class Harvest {
 
     @ManyToOne
     @JoinColumn(name = "sowing_id", nullable = false)
-    @JsonManagedReference // Bu alan serileştirilirken referans olarak görünecek
+    @JsonBackReference // Bu alan Json serileştirmede döngüyü önler
     private Sowing sowing;
 
 

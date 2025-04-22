@@ -84,4 +84,8 @@ public class SowingService {
 
         return sowingDTO;
     }
+    public void deleteSowing(Long id) {
+        sowingRepository.deleteById(id); // Cascade burada çalışacak
+    }
+
 }

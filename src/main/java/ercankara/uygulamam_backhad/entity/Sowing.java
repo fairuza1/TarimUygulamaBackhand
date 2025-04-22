@@ -35,6 +35,6 @@ public class Sowing {
     private Long categoryId;      // Kategori ID
     private String categoryName;  // Kategori adı
 
-    @OneToMany(mappedBy = "sowing", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "sowing", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Harvest> harvests;
 }

@@ -1,10 +1,15 @@
 package ercankara.uygulamam_backhad.dto;
 
 import ercankara.uygulamam_backhad.entity.Land;
+import ercankara.uygulamam_backhad.entity.Sowing;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +39,7 @@ public class LandDTO {
         this.remainingSize = land.getRemainingSize();
         this.photoPath = land.getPhotoPath(); // Fotoğraf yolunu DTO'ya ekliyoruz
     }
+    // Ekim (Sowing) ile ilişki: Land silinince ilgili ekimler de silinsin
+    @OneToMany(mappedBy = "land", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Sowing> sowings;
 }

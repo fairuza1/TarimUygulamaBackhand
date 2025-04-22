@@ -43,4 +43,16 @@ public class SowingController {
         }
         return ResponseEntity.ok(sowings);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSowing(@PathVariable Long id) {
+        try {
+            sowingService.deleteSowing(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            e.printStackTrace(); // Burayı konsola yazdır, hatayı yakalayalım
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
 }
