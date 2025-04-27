@@ -15,15 +15,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class HarvestService {
+
     private final HarvestRepository harvestRepository;
     private final SowingRepository sowingRepository;
-    private final LandRepository landRepository; // Arazi repository'sini ekliyoruz
+    private final LandRepository landRepository;
 
     @Autowired
     public HarvestService(HarvestRepository harvestRepository, SowingRepository sowingRepository, LandRepository landRepository) {
         this.harvestRepository = harvestRepository;
         this.sowingRepository = sowingRepository;
-        this.landRepository = landRepository; // Dependency injection ile landRepository'i alıyoruz
+        this.landRepository = landRepository;
     }
 
     public List<HarvestDTO> getAllHarvests() {
@@ -37,23 +38,23 @@ public class HarvestService {
         Harvest savedHarvest = harvestRepository.save(harvest);
 
         // Ekim ile ilişkili araziyi al
-        Sowing sowing = savedHarvest.getSowing(); // Hasat edilen ekim kaydını al
-        Land land = sowing.getLand();  // Araziyi al
+        Sowing sowing = savedHarvest.getSowing();
+        Land land = sowing.getLand();  // Hasat edilen araziyi alıyoruz.
 
         if (land != null) {
-            double harvestedSize = sowing.getPlantingAmount();  // Hasat edilen alan miktarı
-            double updatedRemainingSize = land.getRemainingSize() + harvestedSize;  // Kalan alanı güncelliyoruz.
+            double harvestedSize = sowing.getPlantingAmount();  // Ekim miktarı kadar alan hasat edildi.
+            double updatedRemainingSize = land.getRemainingSize() + harvestedSize;  // Kalan alanı artırıyoruz.
 
             // Kalan alan, toplam araziyi geçemez
             if (updatedRemainingSize > land.getLandSize()) {
                 updatedRemainingSize = land.getLandSize(); // Kalan alan toplam arazinin boyutunu geçemez
             }
 
-            land.setRemainingSize(updatedRemainingSize);  // Araziyi güncelliyoruz
-            landRepository.save(land);  // Arazinin güncellenmiş hali kaydediliyor
+            land.setRemainingSize(updatedRemainingSize);  // Araziyi güncelliyoruz.
+            landRepository.save(land);  // Arazinin güncellenmiş hali kaydediliyor.
         }
 
-        return convertToDTO(savedHarvest);  // Hasat kaydını DTO'ya dönüştürüp döndürüyoruz
+        return convertToDTO(savedHarvest);
     }
 
     public void deleteHarvest(Long id) {
@@ -84,7 +85,6 @@ public class HarvestService {
     }
 
     public List<HarvestDTO> getHarvestsByUserId(Long userId) {
-        // Kullanıcı ID'sine ait ekimlere göre hasatları filtrele
         return harvestRepository.findAll().stream()
                 .filter(harvest -> harvest.getSowing() != null && harvest.getSowing().getUserId().equals(userId))
                 .map(this::convertToDTO)

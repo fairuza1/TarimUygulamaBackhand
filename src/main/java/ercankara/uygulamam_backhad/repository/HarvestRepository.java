@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface HarvestRepository extends JpaRepository<Harvest, Long> {
-    List<Harvest> findBySowing_UserId(Long userId);
+    boolean existsBySowingId(Long sowingId);  // Hasat yapılmış mı kontrolü
+
 }

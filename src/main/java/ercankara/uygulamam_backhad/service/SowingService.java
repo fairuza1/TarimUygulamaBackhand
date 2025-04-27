@@ -9,6 +9,7 @@ import ercankara.uygulamam_backhad.repository.SowingRepository;
 import ercankara.uygulamam_backhad.repository.LandRepository;
 import ercankara.uygulamam_backhad.repository.PlantRepository;
 import ercankara.uygulamam_backhad.repository.UserRepository;
+import ercankara.uygulamam_backhad.repository.HarvestRepository;  // HarvestRepository ekleniyor
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class SowingService {
     private final LandRepository landRepository;
     private final PlantRepository plantRepository;
     private final UserRepository userRepository;
+    private final HarvestRepository harvestRepository;  // HarvestRepository enjekte ediliyor
 
     public List<SowingDTO> getSowingsByLandId(Long landId) {
         List<Sowing> sowings = sowingRepository.findByLandId(landId);
@@ -84,23 +86,30 @@ public class SowingService {
 
         return sowingDTO;
     }
+
     public void deleteSowing(Long id) {
         Sowing sowing = sowingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sowing not found"));
 
         Land land = sowing.getLand();
-        double newRemainingSize = land.getRemainingSize() + sowing.getPlantingAmount();
+        double plantingAmount = sowing.getPlantingAmount();
 
-        // Kalan alan, toplam alanı geçemez
-        if (newRemainingSize > land.getLandSize()) {
-            newRemainingSize = land.getLandSize();
+        // Hasat yapılmış mı kontrol et
+        boolean isHarvested = harvestRepository.existsBySowingId(sowing.getId());
+
+        if (!isHarvested) {
+            // Eğer hasat yapılmamışsa, ekilen alanı kalan alana ekle
+            double newRemainingSize = land.getRemainingSize() + plantingAmount;
+
+            // Kalan alan, toplam alanı geçemez
+            if (newRemainingSize > land.getLandSize()) {
+                newRemainingSize = land.getLandSize();
+            }
+
+            land.setRemainingSize(newRemainingSize);
+            landRepository.save(land); // Güncellenmiş araziyi kaydet
         }
-
-        land.setRemainingSize(newRemainingSize);
-        landRepository.save(land); // Güncellenmiş araziyi kaydet
 
         sowingRepository.delete(sowing);
     }
-
-
 }
