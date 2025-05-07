@@ -11,5 +11,4 @@ public class RatingDTO {
     private Long id;
     private Long harvestId; // İlgili hasat ID'si (gerekli olacak)
 
-
 }

@@ -32,12 +32,14 @@ public class RatingService {
 
     public Rating createRating(RatingDTO ratingDTO) {
         Harvest harvest = harvestRepository.findById(ratingDTO.getHarvestId())
-                .orElseThrow(() -> new RuntimeException("Harvest not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Harvest bulunamadı: " + ratingDTO.getHarvestId()));
 
         Rating rating = new Rating();
         rating.setHarvest(harvest);
         return ratingRepository.save(rating);
     }
+
+
 
 
     public List<RatingDTO> getAllRatings() {

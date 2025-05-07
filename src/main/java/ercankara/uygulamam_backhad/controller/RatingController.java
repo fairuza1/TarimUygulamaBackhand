@@ -23,14 +23,18 @@ public class RatingController {
     }
 
     @PostMapping
-    public ResponseEntity<Rating> createRating(@RequestBody RatingDTO ratingDTO) {
+    public ResponseEntity<?> createRating(@RequestBody RatingDTO ratingDTO) {
         try {
             Rating rating = ratingService.createRating(ratingDTO);
             return new ResponseEntity<>(rating, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Sunucu hatası: " + e.getMessage());
         }
     }
+
+
 
     @GetMapping
     public ResponseEntity<List<RatingDTO>> getAllRatings() {

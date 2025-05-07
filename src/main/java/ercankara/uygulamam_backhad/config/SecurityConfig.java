@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/categories/**").permitAll()  // Kategoriler herkese açık
                         .requestMatchers("/api/sowings/**").permitAll()
                         .requestMatchers("/harvests/**").permitAll()
+                        .requestMatchers("/api/ratings/**").permitAll()
 
                         .requestMatchers("/plants/by-category","/plants/detail/").permitAll()
 
