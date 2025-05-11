@@ -28,6 +28,9 @@ public class Rating {
     @ElementCollection
     private Map<String, Integer> categoryRatings;
 
+    private Double totalScore; // EKLENDİ
+
+
     @ElementCollection
     private List<String> tags;
 

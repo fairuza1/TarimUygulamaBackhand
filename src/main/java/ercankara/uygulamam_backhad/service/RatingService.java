@@ -9,8 +9,6 @@ import ercankara.uygulamam_backhad.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,7 +24,6 @@ public class RatingService {
         this.harvestRepository = harvestRepository;
     }
 
-    // Hasat ID'sine göre değerlendirmeleri bul
     public List<Rating> findByHarvestId(Long harvestId) {
         return ratingRepository.findByHarvestId(harvestId);
     }
@@ -36,17 +33,32 @@ public class RatingService {
                 .orElseThrow(() -> new IllegalArgumentException("Harvest bulunamadı: " + ratingDTO.getHarvestId()));
 
         Rating rating = new Rating();
-        rating.setAmount(ratingDTO.getAmount()); // <<<< BURASI YENİ
+        rating.setAmount(ratingDTO.getAmount());
         rating.setCategoryRatings(ratingDTO.getCategoryRatings());
         rating.setComment(ratingDTO.getComment());
         rating.setHarvestStatus(ratingDTO.getHarvestStatus());
         rating.setTags(ratingDTO.getTags());
         rating.setHarvest(harvest);
+
+        // ✅ totalScore hesapla ve set et
+        double categoryTotal = 0;
+        Map<String, Integer> categoryRatings = ratingDTO.getCategoryRatings();
+        if (categoryRatings != null && !categoryRatings.isEmpty()) {
+            for (Integer val : categoryRatings.values()) {
+                if (val != null) {
+                    categoryTotal += (double) val / 5.0;
+                }
+            }
+        }
+
+        int harvestStatusScore = ratingDTO.getHarvestStatus() != null ? ratingDTO.getHarvestStatus() : 0;
+        double totalScore = (categoryTotal + harvestStatusScore) / 2.0;
+        totalScore = Math.round(totalScore * 100.0) / 100.0;
+
+        rating.setTotalScore(totalScore); // veritabanına kaydedilecek
+
         return ratingRepository.save(rating);
     }
-
-
-
 
     public List<RatingDTO> getAllRatings() {
         return ratingRepository.findAll().stream()
@@ -60,8 +72,6 @@ public class RatingService {
         return convertToDTO(rating);
     }
 
-
-
     private RatingDTO convertToDTO(Rating rating) {
         RatingDTO ratingDTO = new RatingDTO();
         ratingDTO.setId(rating.getId());
@@ -70,6 +80,7 @@ public class RatingService {
         ratingDTO.setTags(rating.getTags());
         ratingDTO.setComment(rating.getComment());
         ratingDTO.setHarvestStatus(rating.getHarvestStatus());
+        ratingDTO.setTotalScore(rating.getTotalScore()); // ✅ DTO'ya ekle
 
         Harvest harvest = rating.getHarvest();
         if (harvest != null) {

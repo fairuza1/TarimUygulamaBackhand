@@ -19,6 +19,7 @@ public class RatingDTO {
     private List<String> tags;
     private Double amount;
     private Double yieldPerSquareMeter;
+    private Double totalScore; // zaten vardı
 
 
 
