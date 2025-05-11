@@ -46,4 +46,17 @@ public class RatingController {
         RatingDTO ratingDTO = ratingService.getRatingById(id);
         return new ResponseEntity<>(ratingDTO, HttpStatus.OK);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteRating(@PathVariable Long id) {
+        try {
+            ratingService.deleteRating(id);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Değerlendirme başarıyla silindi.");
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Silme işlemi sırasında bir hata oluştu: " + e.getMessage());
+        }
+    }
 }
