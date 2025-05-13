@@ -2,6 +2,7 @@ package ercankara.uygulamam_backhad.service;
 
 import ercankara.uygulamam_backhad.dto.RatingDTO;
 import ercankara.uygulamam_backhad.entity.Harvest;
+import ercankara.uygulamam_backhad.entity.Land;
 import ercankara.uygulamam_backhad.entity.Rating;
 import ercankara.uygulamam_backhad.entity.Sowing;
 import ercankara.uygulamam_backhad.repository.HarvestRepository;
@@ -80,26 +81,43 @@ public class RatingService {
         ratingDTO.setTags(rating.getTags());
         ratingDTO.setComment(rating.getComment());
         ratingDTO.setHarvestStatus(rating.getHarvestStatus());
-        ratingDTO.setTotalScore(rating.getTotalScore()); // ✅ DTO'ya ekle
+        ratingDTO.setTotalScore(rating.getTotalScore());
 
         Harvest harvest = rating.getHarvest();
         if (harvest != null) {
             ratingDTO.setHarvestId(harvest.getId());
 
             Sowing sowing = harvest.getSowing();
-            Double plantingAmount = Double.valueOf((sowing != null) ? sowing.getPlantingAmount() : null);
-            Double amount = rating.getAmount();
+            if (sowing != null) {
+                // m² başına verim hesapla
+                Double plantingAmount = (double) sowing.getPlantingAmount();
+                Double amount = rating.getAmount();
+                if (plantingAmount != null && plantingAmount != 0 && amount != null) {
+                    Double yield = amount / plantingAmount;
+                    ratingDTO.setYieldPerSquareMeter(yield);
+                }
 
-            if (plantingAmount != null && plantingAmount != 0 && amount != null) {
-                Double yield = amount / plantingAmount;
-                ratingDTO.setYieldPerSquareMeter(yield);
-            } else {
-                ratingDTO.setYieldPerSquareMeter(null);
+                // 🌱 Ekim Bilgileri
+                ratingDTO.setPlantingDate(sowing.getSowingDate().toString());
+                ratingDTO.setPlantingMethod(sowing.getCategoryName()); // plantingMethod yerine categoryName geliyor
+                if (sowing.getPlant() != null) {
+                    ratingDTO.setPlantName(sowing.getPlant().getName());
+                }
+
+                // 🌍 Arazi Bilgileri
+                Land land = sowing.getLand();
+                if (land != null) {
+                    ratingDTO.setLandName(land.getName());
+                    ratingDTO.setLandSize(land.getLandSize());
+                    String location = land.getCity() + ", " + land.getDistrict() + ", " + land.getVillage();
+                    ratingDTO.setLandLocation(location);
+                }
             }
         }
 
         return ratingDTO;
     }
+
 
     public void deleteRating(Long id) {
         Rating rating = ratingRepository.findById(id)

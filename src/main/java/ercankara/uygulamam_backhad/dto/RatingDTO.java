@@ -21,6 +21,15 @@ public class RatingDTO {
     private Double yieldPerSquareMeter;
     private Double totalScore; // zaten vardı
 
+    // Yeni ekleyeceklerin:
+    private String plantName;
+    private String plantingDate;
+    private String plantingMethod;
+
+    private String landName;
+    private Double landSize;
+    private String landLocation;
+
 
 
 }
