@@ -10,6 +10,7 @@ import ercankara.uygulamam_backhad.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -124,4 +125,40 @@ public class RatingService {
                 .orElseThrow(() -> new IllegalArgumentException("Silinecek değerlendirme bulunamadı: " + id));
         ratingRepository.delete(rating);
     }
+    public List<RatingDTO> getRecommendations(String city, String district, String village) {
+        List<Rating> allRatings = ratingRepository
+                .findByHarvest_Sowing_Land_CityAndHarvest_Sowing_Land_DistrictAndHarvest_Sowing_Land_Village(
+                        city, district, village);
+
+        // Bitkilere göre grupla
+        Map<String, List<Rating>> groupedByPlant = allRatings.stream()
+                .collect(Collectors.groupingBy(r -> r.getHarvest().getSowing().getPlant().getName()));
+
+        // Her bitki için ortalama skor ve örnek veriye göre RatingDTO oluştur
+        List<RatingDTO> recommendations = groupedByPlant.entrySet().stream()
+                .map(entry -> {
+                    String plantName = entry.getKey();
+                    List<Rating> ratings = entry.getValue();
+                    double avgScore = ratings.stream()
+                            .mapToDouble(Rating::getTotalScore)
+                            .average()
+                            .orElse(0.0);
+                    avgScore = Math.round(avgScore * 100.0) / 100.0;
+
+                    // Örnek bir rating alıp DTO'ya çevir
+                    Rating exampleRating = ratings.get(0);
+                    RatingDTO dto = convertToDTO(exampleRating);
+
+                    dto.setPlantName(plantName); // zaten atanıyor ama garanti olsun
+                    dto.setTotalScore(avgScore); // ortalama ile override ediyoruz
+
+                    return dto;
+                })
+                .sorted(Comparator.comparingDouble(RatingDTO::getTotalScore).reversed())
+                .collect(Collectors.toList());
+
+        return recommendations;
+    }
+
+
 }

@@ -33,9 +33,6 @@ public class RatingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Sunucu hatası: " + e.getMessage());
         }
     }
-
-
-
     @GetMapping
     public ResponseEntity<List<RatingDTO>> getAllRatings() {
         List<RatingDTO> ratings = ratingService.getAllRatings();
@@ -59,4 +56,18 @@ public class RatingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Silme işlemi sırasında bir hata oluştu: " + e.getMessage());
         }
     }
+    @GetMapping("/recommendations")
+    public ResponseEntity<?> getRecommendations(
+            @RequestParam String city,
+            @RequestParam String district,
+            @RequestParam String village) {
+        try {
+            List<RatingDTO> recommendations = ratingService.getRecommendations(city, district, village);
+            return ResponseEntity.ok(recommendations);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Öneriler alınırken hata oluştu: " + e.getMessage());
+        }
+    }
+
 }
