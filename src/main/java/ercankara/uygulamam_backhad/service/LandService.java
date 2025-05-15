@@ -92,5 +92,7 @@ public class LandService {
         Land updatedLand = landRepository.save(existingLand);
         return new LandDTO(updatedLand);
     }
-
+    public long getTotalLandCount() {
+        return landRepository.count();
+    }
 }

@@ -124,4 +124,10 @@ public class LandController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getTotalLandCount() {
+        long count = landService.getTotalLandCount();
+        return ResponseEntity.ok(count);
+    }
+
 }
