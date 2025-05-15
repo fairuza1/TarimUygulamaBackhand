@@ -112,4 +112,12 @@ public class SowingService {
 
         sowingRepository.delete(sowing);
     }
+    public double calculateTotalCultivatedAreaByUser(Long userId) {
+        List<Sowing> sowings = sowingRepository.findByUserId(userId);
+        return sowings.stream()
+                .mapToDouble(Sowing::getPlantingAmount)
+                .sum();
+    }
+
+
 }

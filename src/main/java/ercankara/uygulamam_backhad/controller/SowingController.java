@@ -53,6 +53,12 @@ public class SowingController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/user/{userId}/total-cultivated-area")
+    public ResponseEntity<Double> getTotalCultivatedAreaByUser(@PathVariable Long userId) {
+        double totalArea = sowingService.calculateTotalCultivatedAreaByUser(userId);
+        return ResponseEntity.ok(totalArea);
+    }
+
 
 
 }
