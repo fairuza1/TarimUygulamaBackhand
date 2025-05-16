@@ -118,6 +118,11 @@ public class SowingService {
                 .mapToDouble(Sowing::getPlantingAmount)
                 .sum();
     }
+    public List<SowingDTO> getRecentSowingsByUserId(Long userId) {
+        List<Sowing> sowings = sowingRepository.findTop5ByUserIdOrderBySowingDateDesc(userId);
+        return sowings.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
 
 
 }

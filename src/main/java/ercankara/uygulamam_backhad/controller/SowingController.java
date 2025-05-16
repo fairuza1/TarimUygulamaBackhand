@@ -58,6 +58,14 @@ public class SowingController {
         double totalArea = sowingService.calculateTotalCultivatedAreaByUser(userId);
         return ResponseEntity.ok(totalArea);
     }
+    @GetMapping("/user/{userId}/recent")
+    public ResponseEntity<List<SowingDTO>> getRecentSowingsByUser(@PathVariable Long userId) {
+        List<SowingDTO> recentSowings = sowingService.getRecentSowingsByUserId(userId);
+        if (recentSowings.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(recentSowings);
+    }
 
 
 

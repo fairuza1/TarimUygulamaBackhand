@@ -9,4 +9,5 @@ public interface SowingRepository extends JpaRepository<Sowing, Long> {
 
     List<Sowing> findByLandId(Long landId);  // Araziye göre ekimleri al
     List<Sowing> findByUserId(Long userId);  // Kullanıcıya göre ekimleri al
+    List<Sowing> findTop5ByUserIdOrderBySowingDateDesc(Long userId);
 }
