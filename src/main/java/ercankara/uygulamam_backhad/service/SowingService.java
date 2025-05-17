@@ -82,7 +82,10 @@ public class SowingService {
         sowingDTO.setCategoryId(sowing.getCategoryId());
         sowingDTO.setUserId(sowing.getUserId());
         sowingDTO.setCategoryName(sowing.getCategoryName());
-        sowingDTO.setRemainingSize(sowing.getLand().getRemainingSize()); // Burada ekleme
+        sowingDTO.setRemainingSize(sowing.getLand().getRemainingSize());
+
+        boolean isHarvested = harvestRepository.existsBySowingId(sowing.getId());
+        sowingDTO.setHarvested(isHarvested);  // DTO'ya aktar
 
         return sowingDTO;
     }

@@ -22,4 +22,6 @@ public class SowingDTO {
 
     private double remainingSize; // Yeni alan
 
+    private boolean harvested;
+
 }
