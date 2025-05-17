@@ -116,11 +116,20 @@ public class SowingService {
         sowingRepository.delete(sowing);
     }
     public double calculateTotalCultivatedAreaByUser(Long userId) {
+        // İlgili kullanıcıya ait tüm ekimleri getir
         List<Sowing> sowings = sowingRepository.findByUserId(userId);
-        return sowings.stream()
+
+        // Hasat edilmemiş ekimleri filtrele
+        List<Sowing> unharvestedSowings = sowings.stream()
+                .filter(sowing -> !harvestRepository.existsBySowingId(sowing.getId()))
+                .toList();
+
+        // Sadece hasat edilmemiş ekimlerin toplam alanını hesapla
+        return unharvestedSowings.stream()
                 .mapToDouble(Sowing::getPlantingAmount)
                 .sum();
     }
+
     public List<SowingDTO> getRecentSowingsByUserId(Long userId) {
         List<Sowing> sowings = sowingRepository.findTop5ByUserIdOrderBySowingDateDesc(userId);
         return sowings.stream().map(this::convertToDTO).collect(Collectors.toList());
